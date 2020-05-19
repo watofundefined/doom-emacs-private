@@ -1,0 +1,25 @@
+* Monthly Review
+** Review [[~/org/gtd/goals.org][Life Goals]]
+- [ ] Scroll through completed goals.
+- [ ] Move newly completed goals to “Completed” heading for archives.
+- [ ] Update timelines for existing goals.
+- [ ] Update wording/definition/scale of goals.
+- [ ] Add any new goals, and corresponding projects if needed.
+** Review [[elisp:(w-org-find-main-gtd-file)][Projects List]]
+- [ ] Archive any completed or inactive projects
+- [ ] Update outcome for each project, making sure corresponding goal is listed under each project in Org-Mode
+- [ ] Order projects by general priority in Org-Mode
+- [ ] Replicate updated Project List as needed
+  - [ ] Org-Mode
+  - [ ] Documents Folder
+** Review Someday / Maybe list
+- [ ] Review [[elisp:(w-org-find-someday-file)][Someday List]]
+- [ ] Assign next actions or new projects to any that I might want to consider doing
+** Re-prioritize tasks
+- [ ] Review next actions and re-apply priority tags, accounting for priority drift
+** Extract highlights from finished ebooks
+** Done [0/4]
+- [ ] [[elisp:(org-save-all-org-buffers)][Save all org buffers]]
+- [ ] [[elisp:(w-org-sync-l-2-r)][Push changes to cloud]]
+- [ ] [[elisp:(w-org-sync-enable)][Enable sync]]
+- [ ] [[elisp:(org-clock-out)][Clock out]]

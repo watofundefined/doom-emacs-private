@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Expects arguments to be expanded paths (i.e. no '~') of files to be synced.
+# $ synclocaltoremote path1 path2 path3 path4
+#
+# Good:
+# $ synclocaltoremote /home/<my-user>/org/gtd/BMO.org /home/<my-user>/org/gtd/inbox-phone.org
+# Bad:
+# $ synclocaltoremote ~/org/gtd/BMO.org ~/org/gtd/inbox-phone.org
+
+# 'remote' is the [name] of your remote from ~/.config/rclone
+# 'org' is the name of a directory in cloud
+remote_path="remote:org"
+
+echo ""
+echo "syncing local -> remote"
+echo "  start $(date +"%F %T")"
+
+for local_path in "$@"
+do
+    rclone copy $local_path $remote_path &
+done
+
+# Notes of a shell noob:
+# "&" makes the next command run inside a  forked shell (subprocess)
+# When I executed this script from Emacs using the 'start-process
+# then only the last file was synced. Hence the "wait" below:
+wait
+echo "  end   $(date +"%F %T")"

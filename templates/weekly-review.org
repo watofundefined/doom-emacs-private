@@ -1,0 +1,47 @@
+* Weekly Review
+** Get Clear [0/4]
+- [ ] Before starting contemplate on what got my attention lately, [[elisp:(org-capture nil "n")][Capture notes]]
+- [ ] Collect Loose Papers and Materials (desk, wallet, pockets)
+- [ ] Get <X> to Zero [0/9]
+  - [ ] Papers
+  - [ ] Physical Notebook
+  - [ ] Physical Objects
+  - [ ] Text Messages
+  - [ ] [[elisp:(w-org-open-emails)][Email Inboxes]]
+  - [ ] Kindle highlights
+  - [ ] Browser Tabs
+  - [ ] [[elisp:(dired "~/Downloads")][Downloads]] Folder
+  - [ ] [[elisp:(dired "~/Desktop")][Desktop]] Folder
+- [ ] Empty Your Head: New projects, tasks, waiting-fors, someday/maybes?
+** Get Current [0/9]
+- [ ] Review [[elisp:(w-org-longer-open-loops)][Previous and Upcoming Calendar Data]]
+  - Make sure there are no loose threads ("Oh, that reminds me of...")
+  - Feel free to look beyond 2 weeks ahead
+  - Capture actions that are required for future plans?
+- [ ] Review [[elisp:(w-org-show-todos)][Action Lists]] (importance?, still relevant?)
+- [ ] Review [[elisp:(w-org-waiting-projects)][Waiting For List]] (Did I get a response and forgot to update? Do I need to nudge someone?)
+- [ ] Review [[elisp:(w-org-find-main-gtd-file)][Projects List]]
+  - Are all projects still relevant? Refile to someday list? Delete? Archive?
+- [ ] Review [[elisp:(w-org-stuck-projects)][Stuck Projects]]
+- [ ] Archive completed or inactive projects.
+- [ ] Review Any Relevant Checklists
+** Get Creative [0/5]
+- [ ] Review [[elisp:(w-org-find-someday-file)][Someday List]]
+  - do I feel like moving any of the items to projects list?
+- [ ] [[elisp:(org-capture nil "n")][Capture notes]]
+- [ ] Be Creative and Courageous: Use intuition. Are there any new, wonderful, harebrained, creative, thought-provoking, risk-taking ideas you can capture and add into your system, or "external brain"?
+- [ ] What's the most strategic thing for you to do next?
+** Journal [0/8]
+- [ ] How are you doing right now?
+- [ ] What went well this week?
+- [ ] What didn’t go so well this week?
+- [ ] Did you learn anything important this week?
+- [ ] Is there anything you can tweak, simplify, or eliminate?
+- [ ] What is currently holding you back?
+- [ ] What urgent questions do you have?
+- [ ] What do you feel grateful for in your life and work?
+** Done [0/4]
+- [ ] [[elisp:(org-save-all-org-buffers)][Save all org buffers]]
+- [ ] [[elisp:(w-org-sync-l-2-r)][Push changes to cloud]]
+- [ ] [[elisp:(w-org-sync-enable)][Enable sync]]
+- [ ] [[elisp:(org-clock-out)][Clock out]]

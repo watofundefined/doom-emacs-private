@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# The first argument is an expanded path pointing to a directory which contains
+# files to be synced. Rest of the args are names of files to be synced.
+# $ syncremotetolocal path file1 file2 file3
+#
+# Good:
+# $ syncremotetolocal /home/<my-user>/org/ BMO.org inbox-phone.org
+# Bad:
+# $ synclocaltoremote ~/org/ BMO.org inbox-phone.org
+
+# 'remote' is the [name] of a remote from ~/.config/rclone
+remote_base="remote:org/"
+
+echo ""
+echo "syncing remote -> local"
+echo "  start $(date +"%F %T")"
+
+for filename in "${@:2}"
+do
+    rclone copy "$remote_base$filename" $1 &
+done
+
+# Notes of a shell noob:
+# "&" makes the next command run inside a  forked shell (subprocess)
+# When I executed this script from Emacs using the 'start-process
+# then only the last file was synced. Hence the "wait" below:
+wait
+echo "  end   $(date +"%F %T")"

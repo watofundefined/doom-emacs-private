@@ -1,0 +1,15 @@
+* Daily Review
+- [ ] Clear Physical Desktop / Inbox / Notebook
+- [ ] Clear [[elisp:(dired "~/Downloads")][Downloads]] and [[elisp:(dired "~/Desktop")][Desktop]] Folders
+- [ ] Collect [[elisp:(w-org-recent-open-loops)][Open Loops]] (+/- 2 days)
+- [ ] Clear [[elisp:(w-org-open-emails)][Email Inboxes]]
+- [ ] Process streams (Slack, [[https://twitter.com/][Twitter]]) as inboxes
+      Record tasks, read it later, file notes
+- [ ] Capture any remaining open loops as tasks
+- [ ] Refile tasks from [[file:~/org/gtd/inbox.org][Inbox]] and [[file:~/org/gtd/inbox-phone.org][Phone Inbox]]
+- [ ] Tag and schedule entries in your [[elisp:(find-file wat/gtd-main-file)][Main GTD File]]
+- [ ] Schedule [[elisp:(w-org-todays-agenda)][Today's tasks]] (immersive -> process, deep -> shallow)
+- [ ] [[elisp:(org-save-all-org-buffers)][Save all org buffers]]
+- [ ] [[elisp:(w-org-sync-l-2-r)][Push changes to cloud]]
+- [ ] [[elisp:(w-org-sync-enable)][Enable sync]]
+- [ ] [[elisp:(org-clock-out)][Clock out]]

@@ -1,0 +1,27 @@
+* Mind Sweep [0/1]
+
+These are just raw notes from one of the GTD podcasts.
+
+[[elisp:(org-capture nil "n")][Just Capture notes]], analyze them later.
+
+Triggers:
+
+- [ ] What's on top of my mind?
+      When processing later check whether those things are already in the system. If they are then they shouldn't be on top of my mind - so analyze if there are any todos/actions missing in project, etc.
+- [ ] What happened in the last couple of hours, days? (glance at calendar - last 1-2 weeks)
+- [ ] What's coming?
+- [ ] Family stuff
+- [ ] Season planning, vacation, social events
+- [ ] Nitty gritty work stuff, projects that have emerged that I haven't identified as such
+- [ ] Problems
+- [ ] In your mind go to the office, home. Look around you, visualize it and think about people you see
+- [ ] Maintenance stuff, clean
+- [ ] Think of people - conversations you need to/want to have
+- [ ] Work - high level - what am I supposed to be handling well - is there anything unclear?
+- [ ] Possibilities, opportunities
+- [ ] Personal, professional development
+- [ ] Finances, bank, investments
+- [ ] Fun (concerts, subscriptions, festivals, movies), stuff with family
+- [ ] Relationships - family, friends, network
+- [ ] Creativity
+- [ ] Gear - does anything need fixing?

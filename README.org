@@ -1,0 +1,278 @@
+#+TITLE: Noob's Doom Emacs Config
+
+Yet another Doom Emacs config.
+
+Tested on:
+
+- Ubuntu 18.04, Emacs 27.0.91
+- Windows 10, Emacs 26.3 (I don't use Windows much these days, but if I would I'd try setting up Emacs in WSL)
+
+The [[#21-wat-org-sync][2.1. wat-org-sync]] module might be useful to people who are considering syncing Org files between PC and phone and who are not sure where to begin.
+My implementation is using [[https://rclone.org/][rclone]] and a cloud storage provider supporting WebDAV.
+
+This repo might also be handy to people who don't know Emacs that well and who would like to jump right in and play with some of the packages/workflows (GTD, [[https://github.com/jethrokuan/org-roam][Org-roam]], [[https://github.com/alphapapa/org-super-agenda][Org-super-agenda]]) before investing more time into configuring them.
+If that's what you're after then have a look at [[#3-clone-and-play][3. Clone and Play]].
+
+** 1. Stolen Code, Credits, Inspiration
+
+*** 1.1. Code and Wisdom
+
+- [[https://discord.gg/qvGgnVx][Doom's Discord]]
+- http://doc.norang.ca/org-mode.html
+- https://github.com/mwfogleman/.emacs.d
+- https://github.com/hlissner/doom-emacs-private
+- https://github.com/alphapapa/org-ql/blob/master/examples.org
+- https://github.com/magnars/.emacs.d
+- http://ergoemacs.org
+- ...many more
+
+
+*** 1.2. Eigengrau Theme
+
+I love this theme. Original lives under https://github.com/jackrusher/dotemacs/.
+I made just a few small changes which are documented inside the files (/themes).
+If you like it, try the original!
+
+
+*** 1.3. GTD Review Templates
+
+Same recommendation as with the theme: If you like review templates in this repo then there's a good chance you'll like the originals even more!
+
+- https://gist.github.com/mwfogleman/267b6bc7e512826a2c36cb57f0e3d854
+- https://braindump.jethro.dev/zettels/weekly_review/
+
+Note: Other people seem to put their capture templates closer to their Org files.
+I decided to put review templates in .doom.d directory for two reasons:
+
+- they live closer to the functions that they are calling (easier refactoring)
+- if anyone wants to clone & play then this should make things easier
+
+The only difference between originals and my files worth mentioning is that in Michael Fogleman's templates the Elisp code is inside code blocks.
+I prefer using the link executing Elisp (~[[elisp:(my-fn)][do stuff]]~) which imho makes the text more readable.
+
+
+
+** 2. Wat Modules
+
+*** 2.1. wat-org-sync
+:PROPERTIES:
+:CUSTOM_ID: 21-wat-org-sync
+:END:
+
+*Note 1* You don't need any of this if you're using Dropbox or similar. You just place your Org files inside the automatically synced directory and configure a phone app to talk to Dropbox.
+
+*Note 2* There's a dependency on Doom-specific hook and variable but it should be fairly easy to port it to "vanilla" Emacs.
+
+Code organization: ~config > state > private fns > public fns > hooks > tasks~
+
+To sync files between PC and phone you need three things:
+
+- Phone app that speaks Org (iPhone [[https://beorgapp.com/][beorg]], Android [[https://github.com/orgzly/orgzly-android][Orgzly]], ...)
+- Cloud provider with WebDAV support (or your own server supporting WebDAV, e.g. [[https://nextcloud.com/][Nextcloud]])
+- Sync computer and cloud (e.g. this module)
+
+*Warning* I started writing this module partly to learn some Elisp so I'm sure that the code can be vastly improved. But it works on my machine ¯\_(ツ)_/¯.
+It doesn't resolve conflicts in files, neither looks for last-modified properties and all that fancy stuff.
+*It just copies files from cloud to PC or vice versa* which is a good-enough solution for my use.
+
+*Assumptions* Files on PC are *modified only via Emacs* (i.e. Emacs hooks are used to trigger sync - not file system events).
+
+*Terminology*
+
+- "l-2-r" = local-to-remote sync
+- "r-2-l" = remote-to-local sync
+
+**** 2.1.1. How It Works
+
+Only specified files (~w-org-sync--files~) are synced.
+
+***** 2.1.1.1. Remote to Local
+
+When Emacs starts (~w-org-sync--r-2-l-delay-after-start~) it will try to copy latest files from cloud to PC.
+Then it runs every ~w-org-sync--r-2-l-interval~ seconds or whenever you switch to one of the files (to prevent spamming cloud provider there's a ~w-org-sync--r-2-l-cooldown~ period).
+
+You can trigger sync manually even if sync is disabled by ~M-x w-org-sync-l-2-r~.
+Manual sync warns you if sync is already in progress, or if you're offline.
+
+
+***** 2.1.1.2. Local to Remote
+
+Whenever one of the phone-synced files is saved, all the phone-synced files are copied to cloud (debounced by time ~w-org-sync--l-2-r-debounce-time~).
+There's an inprogress flag that prevents /r-2-l/ to run in the meantime.
+If sync was already in progress when you saved a file then Emacs will warn you that the sync couldn't be performed.
+
+You can trigger sync manually even if sync is disabled by ~M-x w-org-sync-r-2-l~.
+Manual sync warns you if sync is already in progress, or if you're offline.
+
+
+***** 2.1.1.3. Logging
+
+Every sync run is logged in a temp buffer ~w-org-sync--log-buffer~.
+
+
+**** 2.1.2. How I Use It
+
+To decrease conflicts I have 2 (GTD) inboxes:
+
+- inbox.org (notes created on my PC)
+- inbox-phone.org (notes created on my phone)
+
+I sync only what I need:
+
+- main todo file - to be able to review agenda on my phone + to get notifications
+- inbox-phone - to sync notes captured on phone
+
+To prevent loss of data when I'm doing a lot of local changes on PC (daily/weekly GTD reviews), I disable the sync and enable it only after I've done with my local changes and after I've triggered the sync to remote (~M-x w-org-sync-l-2-r~).
+The disabling part is automated (see ~w-org--create-review~ in wat-org.el) and enabling is just an Elisp link at the end of my GTD review templates.
+See e.g. [[file:templates/daily-review.org][templates/daily-review.org]]:
+
+#+BEGIN_SRC org
+- [ ] [[elisp:(org-save-all-org-buffers)][Save all org buffers]]
+- [ ] [[elisp:(w-org-sync-l-2-r)][Push changes to cloud]]
+- [ ] [[elisp:(w-org-sync-enable)][Enable sync]]
+#+END_SRC
+
+I don't interact with the sync outside of the GTD reviews.
+
+
+**** 2.1.3. API
+
+For different configuration options, see top of the file.
+
+| Action                       | Command                  |
+|------------------------------+--------------------------|
+| Turn off                     | ~M-x w-org-sync-disable~ |
+| Turn on                      | ~M-x w-org-sync-enable~  |
+| Trigger remote -> local sync | ~M-x w-org-sync-r-2-l~   |
+| Trigger local -> remote sync | ~M-x w-org-sync-l-2-r~   |
+
+
+**** 2.1.4. Setup
+
+***** 2.1.4.1. Phone
+
+Both beorg and Orgzly support WebDAV so there shouldn't be any difference between iPhone or Android. It's just a matter of getting the app talking to the cloud.
+
+I've picked a free plan from [[https://www.opendrive.com/][OpenDrive]].
+Here's how my beorg WebDAV settings look like:
+
+#+BEGIN_SRC
+Folder=/org
+File extension=.org
+WebDAV URL=https://webdav.opendrive.com
+Username=<my-open-drive-username>
+Password=<my-open-drive-password>
+#+END_SRC
+
+"/org" is the name of your directory in your cloud - the shell scripts mentioned later work with the assumption that the name of the directory in cloud is "org". I think I had to create that folder manually through the cloud GUI.
+
+
+***** 2.1.4.2. PC
+
+Install rclone, configure it based on your cloud provider.
+Here's how my =~/.config/rclone.conf= looks like:
+
+#+BEGIN_SRC conf
+[remote]
+type = opendrive
+username = my@email.com
+password = 1234
+#+END_SRC
+
+The *[remote]* is used in shell scripts - if you've picked a different name for your cloud during the configuration of rclone you'll need to update shell scripts.
+
+
+***** 2.1.4.3. Scripts
+
+Located under "scripts" directory. You shouldn't need to change anything unless your rclone remote is not called "remote" and your directory in the cloud is not called "org".
+
+
+*** 2.2. wat-org
+
+Code organization: ~config > private fns > public fns > hooks > tasks~
+
+
+*** 2.3. wat-keybindings
+
+You can see how to modify/extend Doom's default keybinding maps
+
+
+** 3. Clone and Play
+:PROPERTIES:
+:CUSTOM_ID: 3-clone-and-play
+:END:
+
+*** 3.1. Setup
+
+- start with [[https://github.com/hlissner/doom-emacs/blob/develop/docs/getting_started.org][Doom's Getting Started]]
+- then [[https://org-roam.readthedocs.io/en/master/installation/][Roam's install guide]] (especially if you're on Windows - you'll need to compile some sql binary)
+- Windows only: install [[https://www.cygwin.com/][Cygwin]]
+- Install [[https://git-scm.com/download/win][git]] if you don't have it already
+- backup your old .doom.d dir if it exists: ~mv ~/.doom.d ~/my.doom.d~
+- backup your old org dir if it exists: ~mv ~/org ~/my.org~
+- ~git clone https://github.com/watofundefined/doom-emacs-private.git ~/.doom.d~
+- install packages: =~/.emacs.d/bin/doom sync=
+
+Run below commands in your terminal to scaffold folders and fill some files with dummy data.
+Use Git Bash if you're on Windows.
+
+#+BEGIN_SRC sh
+mkdir ~/org
+mkdir ~/org/gtd
+echo -e "#+TITLE: Inbox\n\n* TODO Call Alice\n" > ~/org/gtd/inbox.org
+echo -e "#+TITLE: Inbox Phone\n\n" > ~/org/gtd/inbox-phone.org
+echo -e "#+TITLE: BMO\n\n* One-off\n** TODO Share my Doom config\nSCHEDULED: <`date +"%Y-%m-%d %a"`>" > ~/org/gtd/BMO.org
+echo -e "#+TITLE: Someday\n\n* To Read\n** TODO Thinking, Fast and Slow" > ~/org/gtd/someday.org
+echo -e "#+TITLE: Tickler\n\n* TODO Pay the rent\nDEADLINE: <`date -d "+10 days" "+%Y-%m-%d %a"` +1m>" > ~/org/gtd/tickler.org
+mkdir ~/org/roam
+mkdir ~/org/journal
+#+END_SRC
+
+In [[file:config.el][config.el]] comment out the line ~(require 'wat-org-sync)~ (Unless you want to set up cloud-sync of course)
+
+*Start Emacs*
+
+*** 3.2. Noob to Noob Tips
+
+You need to be in Vi's Visual or Normal mode to be able to execute commands starting with /Space/ key. You can enter Normal mode by pressing ~Esc~ or ~C-g Esc~ (= hold 'Ctr/⌘' and press 'g' followed by 'Esc') in case you were executing some command.
+
+To see all existing buffers you can press ~<SPC> b B~ (that's 'Space' followed by 'b' and shifted 'b').
+That will come in handy when navigating through different files later on.
+
+It's really nice to just explore the menus by pressing ~<SPC>~ and waiting for a bit for the menu to show up. Then press one of the letters you see and wait a bit to see submenus.
+
+You can experience similr kind of discoverability when you press ~M-x~ (hold 'Alt/Option' and press 'x'). Now you can type part of the command that you're looking for (takes RegExp) and all commands will be filtered based on your input.
+
+*** 3.3. New TODO
+
+- Type ~<SPC> X t~ (that's 'Space' followed by shifted 'x', followed by 't')
+- Enter your todo text
+- Type ~C-c C-c~ (that's 'Ctrl+c' twice).
+
+Before you type ~C-c C-c~, you can cancel the action by ~C-g~ (which is a common way to stop whatever in-progress action that you're keying) or by ~C-c C-k~.
+
+Once you create the todo, you should be able to find it in the [[file:~/org/gtd/inbox.org][inbox file]].
+
+*** 3.4. Refiling
+
+Try refiling - e.g. moving todo to your BMO.org file
+
+- Open inbox.org (~<SPC> f o inbox.org <RET>~)
+- Navigate to the todo you want to refile
+- Refile by pressing ~<SPC> m r r~
+- Select the destination and hit RET.
+
+*** 3.5. Agenda
+
+You can see your today's agenda by pressing ~<SPC> o a a~.
+
+You can re-schedule a todo by placing cursor on the item and pressing ~<SPC> m s~ when in agenda or ~<SPC> m d s~ when in the Org file.
+Pick a date with ~<Shift> <Arrow>~, fill in hour:minute if you want.
+
+*** 3.6. Roam
+
+Try creating a Roam file by ~<SPC> n r f~ (notes roam find), fill in the file name and hit enter, ~d~ (default template), put your notes in and hit ~C-c C-c~.
+
+*** 3.7. Daily GTD Review
+
+You can start a daily GTD review by pressing ~<SPC> n g d~.

@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: defproject
+# key: project
+# source: https://github.com/magnars/.emacs.d/tree/master/snippets/clojure-mode
+# --
+(defproject ${1:`(file-name-base (f-parent (buffer-file-name)))`} "0.1.0-SNAPSHOT"
+  :description "$2"
+  :url "https://github.com/watofundefined/$1"
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :dependencies [[org.clojure/clojure "1.10.1"]]
+  :profiles {:dev {:plugins []
+                   :dependencies []
+                   :source-paths ["dev"]}})
