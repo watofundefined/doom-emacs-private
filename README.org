@@ -189,12 +189,7 @@ Located under "scripts" directory. You shouldn't need to change anything unless 
 
 *** 2.2. wat-org
 
-Code organization: ~config > private fns > public fns > hooks > tasks~
-
-
-*** 2.3. wat-keybindings
-
-You can see how to modify/extend Doom's default keybinding maps
+Code organization: ~config > private fns > public fns > hooks > tasks > keybindings~
 
 
 ** 3. Clone and Play

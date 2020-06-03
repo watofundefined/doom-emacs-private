@@ -35,4 +35,3 @@
 (require 'wat-org)
 (require 'wat-org-sync)
 (require 'wat-lang-specific)
-(require 'wat-keybindings)
