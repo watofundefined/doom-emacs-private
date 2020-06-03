@@ -123,7 +123,7 @@
                  :head "#+TITLE: ${title}
 #+HUGO_SECTION: posts
 #+HUGO_SLUG: ${slug}
-#+HUGO_DATE: %(format-time-string \"%Y-%m-%dT%H-%M-%S+03:00\" (current-time) t)
+#+date: %(format-time-string \"%Y-%m-%dT%H:%M:%S+03:00\" (current-time) t)
 #+HUGO_DRAFT: true
 #+HUGO_TAGS:
 #+HUGO_CUSTOM_FRONT_MATTER: :subheading
