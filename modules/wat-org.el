@@ -260,6 +260,7 @@ Project is any todo which contains todos."
     :title (w-org--make-org-ql-search-result-title "Waiting Projects")))
 
 (defun w-org-open-emails ()
+  (interactive)
   "Open my emails inside browser"
   (browse-url "https://mail.google.com/mail/u/0/#inbox")
   (browse-url "https://mail.google.com/mail/u/1/#inbox")
