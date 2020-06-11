@@ -42,6 +42,7 @@
 ;;
 ;; State
 (setq w-org-sync--inprogress nil)
+(setq w-org-sync--debouncing-l-2-r nil)
 (setq w-org-sync--r-2-l-ran-at nil)
 (setq w-org-sync--l-2-r-debounce-timer nil)
 (setq w-org-sync--enabled t)
@@ -77,6 +78,7 @@ If the files are Ok, then re-run by 'M-x w-org-sync-l-2-r' or 'M-x w-org-sync-r-
 (defun w-org-sync--try-r-2-l ()
   (when (and w-org-sync--enabled
              (not (w-org-sync--r-2-l-ran-recently-p))
+             (not w-org-sync--debouncing-l-2-r)
              (not w-org-sync--inprogress)
              (w-utils-online-p))
     (w-org-sync--r-2-l)))
@@ -104,7 +106,7 @@ If the files are Ok, then re-run by 'M-x w-org-sync-l-2-r' or 'M-x w-org-sync-r-
   (and w-org-sync--l-2-r-debounce-timer
        (cancel-timer w-org-sync--l-2-r-debounce-timer))
   ;; Set inprgress flag already at this point to prevent r-2-l run during debounce period
-  (setq w-org-sync--inprogress t)
+  (setq w-org-sync--debouncing-l-2-r t)
   (setq w-org-sync--l-2-r-debounce-timer
         (run-with-timer w-org-sync--l-2-r-debounce-time nil #'w-org-sync--l-2-r)))
 
@@ -113,7 +115,11 @@ If the files are Ok, then re-run by 'M-x w-org-sync-l-2-r' or 'M-x w-org-sync-r-
           w-org-sync--files))
 
 (defun w-org-sync--l-2-r ()
-  (setq remote-sync-inprogress t)
+  ;; Cancel any inprogress debounced sync if user invoked #'w-org-sync-l-2-r
+  (and w-org-sync--l-2-r-debounce-timer
+       (cancel-timer w-org-sync--l-2-r-debounce-timer))
+  (setq w-org-sync--debouncing-l-2-r nil)
+  (setq w-org-sync--inprogress t)
   (set-process-sentinel
    (apply #'start-process
           (append `("l-2-r"
