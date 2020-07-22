@@ -53,4 +53,6 @@
 (package! org-protocol-capture-html
   :recipe (:host github :repo "alphapapa/org-protocol-capture-html"))
 
+(package! solarized-theme)
+
 (package! prettier-js)
