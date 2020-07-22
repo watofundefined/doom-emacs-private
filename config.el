@@ -27,6 +27,8 @@
 ;; they are implemented.
 
 (add-load-path! (concat doom-private-dir "modules"))
+(add-load-path! (concat doom-private-dir "packages"))
+(add-load-path! (concat doom-private-dir "themes"))
 
 (require 'wat-utils)
 (require 'wat-common)
