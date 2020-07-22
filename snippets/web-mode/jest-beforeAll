@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Jest beforeAll
+# key: jba
+# condition: t
+# --
+beforeAll(() => {
+  $0
+})

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Jest beforeEach
+# key: jbe
+# condition: t
+# --
+beforeEach(() => {
+  $0
+})

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Jest afterAll
+# key: jaa
+# condition: t
+# --
+afterAll(() => {
+  $0
+})

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: useEffetc
+# key: rue
+# --
+
+useEffect(() => {
+  $0
+}, [$1])

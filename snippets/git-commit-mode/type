@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: type of commit
+# key: t             
+# --
+${1:$$(yas-choose-value '(build chore ci docs feat fix perf refactor style test))}: ${}

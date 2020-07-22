@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: destructure object
+# key: deo
+# condition: t  
+# --
+const { $0 } = $1
