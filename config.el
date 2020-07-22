@@ -37,5 +37,6 @@
 (require 'wat-org)
 (require 'wat-org-sync)
 (require 'wat-lang-specific)
+(require 'wat-vim-macros)
 (autoload 'adoc-mode "adoc-mode" nil t)
 (add-hook 'adoc-mode-hook 'cider-mode)
