@@ -1,12 +1,14 @@
 ;; Source: https://github.com/jackrusher/dotemacs/tree/master/eigengrau
 ;;
+;;
+;; Changes from the original:
+;;
 ;; Original - Org mode's TODO has red background and black text:
 ;; (org-todo ((t (,@fmt-bold ,@fg-base03 ,@bg-red))))
-;;
 ;; New - Org mode's  TODO has black background and red text:
 ;; (org-todo ((t (,@fmt-bold ,@fg-red))))
 ;;
-;; I prefer all headins in Org mode to be of the same color, so I added:
+;; + I prefer all headings in Org mode to be of the same color, so I added:
 ;; (org-level-1 ((t (,@fg-base0 ,@bg-base03))))
 ;; (org-level-2 ((t (,@fg-base0 ,@bg-base03))))
 ;; (org-level-3 ((t (,@fg-base0 ,@bg-base03))))
